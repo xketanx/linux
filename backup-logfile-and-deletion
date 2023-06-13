@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Specify the directory path where you want to delete files
+directory="/opt/tomcat/logs"
+bkp="/logs-backup"
+
+# Specify the file extension you want to delete (e.g., .txt, .log, etc.)
+extension=".out.*.gz"
+
+#sudo systemctl stop tomcat
+
+# Delete files with the specified extension older than five days
+find "$directory" -type f -name "*$extension" -mtime +5 -delete
+
+#This will find all files in the specified directory with the specified extension that are older than five days and delete them.
+sudo mv /opt/tomcat/logs/*.out.*.gz "$bkp/catelina.out.$(date "+%Y.%m.%d-%H.%M.%S").gz"
+sudo find "$bkp" -type f -name "*$extension" -mtime +5 -delete
+
+#sudo systemctl restart  tomcat
