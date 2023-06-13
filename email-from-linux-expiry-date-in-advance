@@ -1,0 +1,26 @@
+#!/bin/bash
+# Purpose: Alert email about the TLS/SSL cert expiry date in advance
+# Author: ketan mehetre
+# -------------------------------------------------------------------------------
+PEM="/etc/nginx/ssl/letsencrypt/cyberciti.biz/cyberciti.biz.fullchain.cer"
+ 
+# 7 days in seconds 
+DAYS="604800" 
+ 
+# Email settings 
+_sub="$PEM will expire within $DAYS (7 days)."
+_from="system-account@your-dommain"
+_to="mehetre.ketan@gmail.com"
+_openssl="/usr/bin/openssl"
+$_openssl x509 -enddate -noout -in "$PEM"  -checkend "$DAYS" | grep -q 'Certificate will expire'
+ 
+# Send email and push message to my mobile
+if [ $? -eq 0 ]
+then
+    echo "${_sub}"
+        mail -s "$_sub" -r "$_from" "$_to" <<< "Warning: The TLS/SSL certificate ($PEM) will expire soon on $HOSTNAME [$(date)]"
+        # See https://www.cyberciti.biz/mobile-devices/android/how-to-push-send-message-to-ios-and-android-from-linux-cli/ #
+        source ~/bin/cli_app.sh
+        push_to_mobile "$0" "$_sub. See $_to email for detailed log. -- $HOSTNAME " >/dev/null
+fi
+ 
