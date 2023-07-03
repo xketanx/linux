@@ -2,7 +2,7 @@
 # Purpose: Alert email about the TLS/SSL cert expiry date in advance
 # Author: ketan mehetre
 # -------------------------------------------------------------------------------
-PEM="/etc/nginx/ssl/letsencrypt/cyberciti.biz/cyberciti.biz.fullchain.cer"
+PEM="/etc/nginx/ssl/letsencrypt/<site>/<Your>.cer"
  
 # 7 days in seconds 
 DAYS="604800" 
